@@ -59,4 +59,22 @@ router.post('/:id/apply', async (req, res) => {
   }
 });
 
+// GET all dogs owned by a specific owner
+router.get('/owners/:ownerId/dogs', async (req, res) => {
+  const ownerId = req.params.ownerId;
+
+  try {
+    const [rows] = await db.query(`
+      SELECT dog_id, name
+      FROM Dogs
+      WHERE owner_id = ?
+    `, [ownerId]);
+
+    res.json(rows);
+  } catch (error) {
+    console.error('SQL Error:', error);
+    res.status(500).json({ error: 'Failed to fetch dogs for owner' });
+  }
+});
+
 module.exports = router;
