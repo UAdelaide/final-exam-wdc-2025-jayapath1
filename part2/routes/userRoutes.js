@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// POST a new user (simple signup)
+// POST a new user (simple signup - no password hashing yet)
 router.post('/register', async (req, res) => {
   const { username, email, password, role } = req.body;
 
@@ -28,6 +28,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
+// GET current session user info
 router.get('/me', (req, res) => {
   if (!req.session.user) {
     return res.status(401).json({ error: 'Not logged in' });
@@ -35,7 +36,7 @@ router.get('/me', (req, res) => {
   res.json(req.session.user);
 });
 
-// POST login (dummy version)
+// POST login - sets session and redirects based on role
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -43,16 +44,44 @@ router.post('/login', async (req, res) => {
     const [rows] = await db.query(`
       SELECT user_id, username, role FROM Users
       WHERE email = ? AND password_hash = ?
-    `, [email, password]);
+    `, [email, password]); // NOTE: Passwords should be hashed in production
 
     if (rows.length === 0) {
-      return res.status(401).json({ error: 'Invalid credentials' });
+      return res.status(401).send('Invalid credentials');
     }
 
-    res.json({ message: 'Login successful', user: rows[0] });
+    const user = rows[0];
+
+    // Store user info in session
+    req.session.user = {
+      id: user.user_id,
+      username: user.username,
+      role: user.role
+    };
+
+    // Redirect to dashboard based on role
+    if (user.role === 'owner') {
+      return res.redirect('/owner-dashboard.html');
+    } else if (user.role === 'walker') {
+      return res.redirect('/walker-dashboard.html');
+    } else {
+      return res.status(403).send('Unauthorized role');
+    }
+
   } catch (error) {
-    res.status(500).json({ error: 'Login failed' });
+    console.error(error);
+    res.status(500).send('Login failed');
   }
+});
+
+// POST logout - destroys session
+router.post('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).send('Logout failed');
+    }
+    res.redirect('/'); // Redirect to home/login page
+  });
 });
 
 module.exports = router;
