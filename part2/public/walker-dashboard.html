@@ -14,11 +14,9 @@
       <button type="button" @click="logout" class="btn btn-outline-danger">Log Out</button>
     </div>
 
-    <!-- Alert messages -->
     <div v-if="message" class="alert alert-info">{{ message }}</div>
     <div v-if="error" class="alert alert-danger">{{ error }}</div>
 
-    <!-- Walk requests list -->
     <div v-if="walks.length > 0" class="row">
       <div class="col-md-6 mb-4" v-for="walk in walks" :key="walk.request_id">
         <div class="card">
@@ -46,14 +44,14 @@
         const walks = ref([]);
         const message = ref('');
         const error = ref('');
-        const user = ref(null);  // Changed to ref and initial null
+        const user = ref(null);
 
         async function getCurrentUser() {
           try {
             const res = await fetch('/api/users/me');
             if (!res.ok) throw new Error('Failed to fetch current user');
             const userData = await res.json();
-            return userData.user_id;  // Adjust if your API returns a different field name
+            return userData.user_id;
           } catch (err) {
             error.value = err.message;
             return null;
