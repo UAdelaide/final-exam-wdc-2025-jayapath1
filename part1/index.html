@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8" />
   <title>Dog of the Day</title>
   <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
   <style>
@@ -30,7 +31,7 @@
       25% { transform: translateX(-5px); }
       75% { transform: translateX(5px); }
     }
-
+    /* Tiny font size */
     .tiny-text {
       font-size: 6px;
     }
@@ -38,17 +39,17 @@
 </head>
 <body>
   <div id="app">
-    <h1>Dog of the Day</h1>
+    <h1>🐶 Dog of the Day 🐶</h1>
     <div class="dog-container">
       <img
-        src="dogImage"
+        :src="dogImage"
         alt="Random dog"
         width="250"
         height="250"
         tabindex="0"
       />
       <h2 class="tiny-text">{{ dogName }}</h2>
-      <button type="submit" @click="fetchDog">Get New Dog!</button>
+      <button type="" @click="fetchDog">Get New Dog!</button>
       <p class="tiny-text" aria-live="polite">Breed: {{ dogBreed }}</p>
     </div>
   </div>
