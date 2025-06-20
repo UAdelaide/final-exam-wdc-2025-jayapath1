@@ -16,7 +16,7 @@ var pool = mysql.createPool({
 router.get('/dogs', async (req, res) => {
   try {
     const [rows] = await pool.query(`
-      SELECT d.name AS dog_name, d.size, u.username AS owner_username
+      SELECT d.dog_id, d.name AS dog_name, d.size, u.username AS owner_name
       FROM Dogs d
       JOIN Users u ON d.owner_id = u.user_id
     `);
@@ -25,6 +25,7 @@ router.get('/dogs', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 
 // /api/walkrequests/open route
 router.get('/walkrequests/open', async (req, res) => {
