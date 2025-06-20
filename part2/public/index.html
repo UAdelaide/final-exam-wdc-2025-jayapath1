@@ -13,7 +13,7 @@
     <h1 class="mb-4 text-primary">{{ message }}</h1>
     
     <!-- Login Form -->
-    <form action="/login" method="POST" class="bg-white p-4 rounded shadow-sm">
+    <form action="/login" method="POST" class="bg-white p-4 rounded shadow-sm mb-4">
       <div class="mb-3">
         <label for="username" class="form-label">Username:</label>
         <input type="text" class="form-control" id="username" name="username" required />
@@ -24,14 +24,75 @@
       </div>
       <button type="submit" class="btn btn-primary w-100">Login</button>
     </form>
+
+    <!-- Dog Table -->
+    <div v-if="error" class="alert alert-danger">{{ error }}</div>
+
+    <div v-if="dogs.length > 0">
+      <h2 class="mt-4 mb-3">All Dogs</h2>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Photo</th>
+            <th>Name</th>
+            <th>Size</th>
+            <th>Owner</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="dog in dogs" :key="dog.dog_id">
+            <td>
+              <img src="dog.photoUrl" alt="Dog photo" style="width: 80px; height: auto; border-radius: 8px;">
+            </td>
+            <td>{{ dog.name }}</td>
+            <td>{{ dog.size }}</td>
+            <td>{{ dog.owner_name }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p v-else class="text-muted">No dogs found.</p>
   </div>
 
   <script>
-    const { createApp } = Vue;
+    const { createApp, ref, onMounted } = Vue;
+
     createApp({
-      data() {
+      setup() {
+        const message = ref('Welcome to the Dog Walking Service!');
+        const dogs = ref([]);
+        const error = ref('');
+
+        async function loadDogs() {
+          try {
+            const res = await fetch('/api/dogs');
+            if (!res.ok) throw new Error('Failed to load dogs');
+            const dogList = await res.json();
+
+            for (const dog of dogList) {
+              const imgRes = await fetch('https://dog.ceo/api/breeds/image/random');
+              if (imgRes.ok) {
+                const imgData = await imgRes.json();
+                dog.photoUrl = imgData.message;
+              } else {
+                dog.photoUrl = '';
+              }
+            }
+
+            dogs.value = dogList;
+          } catch (err) {
+            error.value = err.message;
+          }
+        }
+
+        onMounted(() => {
+          loadDogs();
+        });
+
         return {
-          message: 'Welcome to the Dog Walking Service!'
+          message,
+          dogs,
+          error
         };
       }
     }).mount('#app');
