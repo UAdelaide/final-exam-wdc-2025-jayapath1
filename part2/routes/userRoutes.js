@@ -72,4 +72,18 @@ router.post('/login', async (req, res) => {
     res.status(500).send('Login failed');
   }
 });
+
+// GET logout route
+router.get('/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      return res.status(500).send('Logout failed');
+    }
+
+    // Clear the cookie and redirect to login form
+    res.clearCookie('connect.sid');
+    res.redirect('/');
+  });
+});
+
 module.exports = router;
