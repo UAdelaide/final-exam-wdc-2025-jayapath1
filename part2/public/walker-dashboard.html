@@ -81,10 +81,10 @@
 // Proceed with the API call to apply to the walk, replacing hardcoded walkerID
           const response = await fetch('/api/walkApplications', {
             method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      request_id: walkRequestId,
-      walker_id: walkerId
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              request_id: walkRequestId,
+              walker_id: walkerId
     })
   });
 
