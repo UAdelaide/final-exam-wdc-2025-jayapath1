@@ -35,7 +35,7 @@ router.get('/me', (req, res) => {
   res.json(req.session.user);
 });
 
-// POST login (dummy version)
+// POST login (updated version with session + redirect)
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -46,13 +46,30 @@ router.post('/login', async (req, res) => {
     `, [email, password]);
 
     if (rows.length === 0) {
-      return res.status(401).json({ error: 'Invalid credentials' });
+      return res.status(401).send('Invalid credentials');
     }
 
-    res.json({ message: 'Login successful', user: rows[0] });
+    const user = rows[0];
+
+    // Save user info in session
+    req.session.user = {
+      id: user.user_id,
+      username: user.username,
+      role: user.role
+    };
+
+    // Redirect user based on role
+    if (user.role === 'owner') {
+      return res.redirect('/owner-dashboard.html');
+    } else if (user.role === 'walker') {
+      return res.redirect('/walker-dashboard.html');
+    } else {
+      return res.status(403).send('Unauthorized role');
+    }
+
   } catch (error) {
-    res.status(500).json({ error: 'Login failed' });
+    console.error(error);
+    res.status(500).send('Login failed');
   }
 });
-
 module.exports = router;
