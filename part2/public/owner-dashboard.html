@@ -10,7 +10,7 @@
 <body class="bg-light">
   <div id="app" class="container py-4">
 
-    <!-- Logout button added here -->
+    <!-- Logout button -->
     <div class="d-flex justify-content-end mb-3">
       <form action="/logout" method="GET">
         <button type="submit" class="btn btn-outline-danger">Logout</button>
@@ -26,6 +26,7 @@
       </div>
       <div class="card-body">
         <form @submit.prevent="submitWalkRequest">
+          <!-- Dog dropdown -->
           <div class="mb-3">
             <label class="form-label">Dog</label>
             <select v-model="form.dog_id" class="form-select" required>
@@ -40,20 +41,23 @@
             <label class="form-label">Requested Date & Time</label>
             <input v-model="form.requested_time" type="datetime-local" class="form-control" required>
           </div>
+
           <div class="mb-3">
             <label class="form-label">Duration (minutes)</label>
             <input v-model="form.duration_minutes" type="number" class="form-control" required>
           </div>
+
           <div class="mb-3">
             <label class="form-label">Location</label>
             <input v-model="form.location" type="text" class="form-control" required>
           </div>
+
           <button type="submit" class="btn btn-success">Create Walk</button>
         </form>
       </div>
     </div>
 
-    <!-- Success or error messages -->
+    <!-- Messages -->
     <div v-if="message" class="alert alert-info">{{ message }}</div>
     <div v-if="error" class="alert alert-danger">{{ error }}</div>
 
@@ -78,6 +82,7 @@
     <p v-else>No walk requests yet.</p>
   </div>
 
+  <!-- Vue App Script -->
   <script>
     const { createApp, ref, onMounted } = Vue;
 
@@ -90,9 +95,22 @@
           location: ''
         });
 
+        const dogs = ref([]);
         const walks = ref([]);
         const message = ref('');
         const error = ref('');
+
+        const ownerId = 1; // TODO: Replace with session/user value if dynamic
+
+        async function loadDogs() {
+          try {
+            const res = await fetch(`/api/owners/${ownerId}/dogs`);
+            if (!res.ok) throw new Error('Failed to load dogs');
+            dogs.value = await res.json();
+          } catch (err) {
+            error.value = err.message;
+          }
+        }
 
         async function loadWalks() {
           try {
@@ -130,11 +148,13 @@
         }
 
         onMounted(() => {
+          loadDogs();
           loadWalks();
         });
 
         return {
           form,
+          dogs,
           walks,
           message,
           error,
