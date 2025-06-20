@@ -9,8 +9,15 @@
 </head>
 <body class="bg-light">
   <div id="app" class="container py-4">
+
+    <!-- Logout button added here -->
+    <div class="d-flex justify-content-end mb-3">
+      <form action="/logout" method="GET">
+        <button type="submit" class="btn btn-outline-danger">Logout</button>
+      </form>
+    </div>
+
     <h1 class="mb-4 text-primary">Owner Dashboard</h1>
-    
 
     <!-- Walk request form -->
     <div class="card mb-4">
