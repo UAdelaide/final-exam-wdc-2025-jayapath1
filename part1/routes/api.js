@@ -1,20 +1,18 @@
-const express = require('express');
-const router = express.Router();
-const mysql = require('mysql2/promise');
+var express = require('express');
+var router = express.Router();
+var mysql = require('mysql2/promise');
 
-// Create MySQL connection pool - update these credentials
-const pool = mysql.createPool({
-  host: '127.0.0.1',      // or 'localhost'
+var pool = mysql.createPool({
+  host: 'localhost',
   user: 'your_mysql_user',
   password: 'your_mysql_password',
   database: 'DogWalkService',
   waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0,
-  port: 3306
+  queueLimit: 0
 });
 
-// Route: GET /api/dogs
+// /api/dogs route
 router.get('/dogs', async (req, res) => {
   try {
     const [rows] = await pool.query(`
@@ -28,7 +26,7 @@ router.get('/dogs', async (req, res) => {
   }
 });
 
-// Route: GET /api/walkrequests/open
+// /api/walkrequests/open route
 router.get('/walkrequests/open', async (req, res) => {
   try {
     const [rows] = await pool.query(`
@@ -44,7 +42,7 @@ router.get('/walkrequests/open', async (req, res) => {
   }
 });
 
-// Route: GET /api/walkers/summary
+// /api/walkers/summary route
 router.get('/walkers/summary', async (req, res) => {
   try {
     const [rows] = await pool.query(`
