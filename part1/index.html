@@ -48,7 +48,7 @@
         tabindex="0"
       />
       <h2 class="tiny-text">{{ dogName }}</h2>
-      <button type="submit" @click="fetchDog">Get New Dog!</button>
+      <button @click="fetchDog">Get New Dog!</button>
       <p class="tiny-text" aria-live="polite">Breed: {{ dogBreed }}</p>
     </div>
   </div>
@@ -60,8 +60,8 @@
       data() {
         return {
           dogImage: '',
-          dogName: 'Sparky',
-          dogBreed: 'Poodle Mix'
+          dogName: 'Sparky',        // hardcoded dog name
+          dogBreed: 'Poodle Mix'    // hardcoded dog breed
         };
       },
       methods: {
