@@ -72,8 +72,8 @@
         }
 
         async function applyToWalk(walkRequestId) {
-  const currentUser = await getCurrentUser();
-  if (!currentUser) {
+          const currentUser = await getCurrentUser();
+          if (!currentUser) {
     alert('You must be logged in to apply for a walk.');
     return;
   }
@@ -96,6 +96,7 @@
     alert('Failed to apply. Please try again.');
   }
 }
+
 
         function logout() {
           // Customize this with your actual logout logic
