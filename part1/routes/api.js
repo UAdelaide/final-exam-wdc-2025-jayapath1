@@ -1,8 +1,8 @@
-const express = require('express');
-const router = express.Router();
-const mysql = require('mysql2/promise');
+var express = require('express');
+var router = express.Router();
+var mysql = require('mysql2/promise');
 
-const pool = mysql.createPool({
+var pool = mysql.createPool({
   host: 'localhost',
   user: 'your_mysql_user',
   password: 'your_mysql_password',
