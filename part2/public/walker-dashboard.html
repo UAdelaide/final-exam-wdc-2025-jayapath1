@@ -71,27 +71,31 @@
           }
         }
 
-        async function applyToWalk(requestId) {
-          if (!currentUser.value) {
-            error.value = 'User not logged in';
-            return;
-          }
-          try {
-            const res = await fetch(`/api/walks/${requestId}/apply`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ walker_id: currentUser.value.user_id })
-            });
-            const result = await res.json();
-            if (!res.ok) throw new Error(result.error || 'Application failed');
-            message.value = result.message;
-            error.value = '';
-            await loadWalkRequests();
-          } catch (err) {
-            error.value = err.message;
-            message.value = '';
-          }
-        }
+        async function applyToWalk(walkRequestId) {
+  const currentUser = await getCurrentUser();
+  if (!currentUser) {
+    alert('You must be logged in to apply for a walk.');
+    return;
+  }
+
+  const walkerId = currentUser.user_id; // Or currentUser.id depending on API
+
+  // Proceed with the API call to apply to the walk, replacing hardcoded walkerID
+  const response = await fetch('/api/walkApplications', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      request_id: walkRequestId,
+      walker_id: walkerId
+    })
+  });
+
+  if (response.ok) {
+    alert('Successfully applied to walk!');
+  } else {
+    alert('Failed to apply. Please try again.');
+  }
+}
 
         function logout() {
           // Customize this with your actual logout logic
