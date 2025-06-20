@@ -74,13 +74,11 @@
         async function applyToWalk(walkRequestId) {
           const currentUser = await getCurrentUser();
           if (!currentUser) {
-    alert('You must be logged in to apply for a walk.');
-    return;
-  }
-
-  const walkerId = currentUser.user_id; // Or currentUser.id depending on API
-
-  // Proceed with the API call to apply to the walk, replacing hardcoded walkerID
+            alert('You must be logged in to apply for a walk.');
+            return;
+          }
+          const walkerId = currentUser.user_id; // Or currentUser.id depending on API
+          //// Proceed with the API call to apply to the walk, replacing hardcoded walkerID
   const response = await fetch('/api/walkApplications', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
