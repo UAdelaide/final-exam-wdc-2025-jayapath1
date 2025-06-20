@@ -1,55 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8" />
   <title>Dog of the Day</title>
   <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
   <style>
     body {
-      background: linear-gradient(45deg, #ff0000, #0000ff);
-      color: white;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-    }
-    .dog-container {
-      width: 300px;
-      margin: 20px auto;
-      text-align: center;
-      border: 5px dashed yellow;
+      background-color: #f0f0f0;
+      color: #333;
+      font-family: Arial, sans-serif;
       padding: 20px;
     }
+
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      text-align: center;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 24px;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+    }
+
     button {
-      background-color: #ff00ff;
-      color: yellow;
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007BFF;
+      color: white;
       border: none;
-      padding: 10px;
+      border-radius: 5px;
       cursor: pointer;
-      font-size: 20px;
-      animation: shake 0.5s infinite;
     }
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-5px); }
-      75% { transform: translateX(5px); }
+
+    button:focus {
+      outline: 3px solid #0056b3;
     }
-    /* Tiny font size */
-    .tiny-text {
-      font-size: 6px;
+
+    .dog-info {
+      margin-top: 10px;
+      font-size: 16px;
     }
   </style>
 </head>
 <body>
   <div id="app">
-    <h1>🐶 Dog of the Day 🐶</h1>
-    <div class="dog-container">
+    <div class="container">
+      <h1>Dog of the Day</h1>
       <img
         :src="dogImage"
-        alt="Random dog"
-        width="250"
-        height="250"
-        tabindex="0"
+        :alt="'Photo of ' + dogName"
       />
-      <h2 class="tiny-text">{{ dogName }}</h2>
-      <button @click="fetchDog">Get New Dog!</button>
-      <p class="tiny-text" aria-live="polite">Breed: {{ dogBreed }}</p>
+      <div class="dog-info" aria-live="polite">
+        <p><strong>Name:</strong> {{ dogName }}</p>
+        <p><strong>Breed:</strong> {{ dogBreed }}</p>
+      </div>
+      <button @click="fetchDog" aria-label="Get a new random dog picture">Get New Dog</button>
     </div>
   </div>
 
@@ -60,8 +76,8 @@
       data() {
         return {
           dogImage: '',
-          dogName: 'Sparky',        // hardcoded dog name
-          dogBreed: 'Poodle Mix'    // hardcoded dog breed
+          dogName: 'Sparky',       // Still hardcoded
+          dogBreed: 'Poodle Mix'   // Still hardcoded
         };
       },
       methods: {
