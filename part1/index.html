@@ -56,7 +56,7 @@
   <div id="app">
     <h1>Dog of the Day</h1>
     <div class="dog-container">
-      <img :src="dogImage" alt="Random dog" width="250" height="250" tabindex="0" />
+      <img src="dogImage" alt="Random dog" width="250" height="250" tabindex="0" />
       <h2 class="tiny-text">{{ dogName }}</h2>
       <button type="button" @click="fetchDog">Get New Dog!</button>
       <p class="tiny-text" aria-live="polite">Breed: {{ dogBreed }}</p>
@@ -76,7 +76,7 @@
         </thead>
         <tbody>
           <tr v-for="dog in dogs" :key="dog.dog_id">
-            <td><img :src="dog.photoUrl" alt="Dog photo" /></td>
+            <td><img src="dog.photoUrl" alt="Dog photo" /></td>
             <td>{{ dog.name }}</td>
             <td>{{ dog.size }}</td>
             <td>{{ dog.owner_name }}</td>
