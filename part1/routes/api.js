@@ -62,4 +62,4 @@ router.get('/walkers/summary', async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = router
