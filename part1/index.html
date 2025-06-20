@@ -42,14 +42,14 @@
     <h1>🐶 Dog of the Day 🐶</h1>
     <div class="dog-container">
       <img
-        :src="dogImage"
+        src="dogImage"
         alt="Random dog"
         width="250"
         height="250"
         tabindex="0"
       />
       <h2 class="tiny-text">{{ dogName }}</h2>
-      <button type="" @click="fetchDog">Get New Dog!</button>
+      <button type="button" @click="fetchDog">Get New Dog!</button>
       <p class="tiny-text" aria-live="polite">Breed: {{ dogBreed }}</p>
     </div>
   </div>
