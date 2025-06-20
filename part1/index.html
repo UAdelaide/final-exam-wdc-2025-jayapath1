@@ -30,25 +30,9 @@
       25% { transform: translateX(-5px); }
       75% { transform: translateX(5px); }
     }
+    /* Tiny font size */
     .tiny-text {
       font-size: 6px;
-    }
-    .dog-table {
-      background-color: rgba(255, 255, 255, 0.2);
-      color: white;
-      margin: 40px auto;
-      width: 90%;
-      border-collapse: collapse;
-    }
-    .dog-table th, .dog-table td {
-      border: 1px solid white;
-      padding: 8px;
-      text-align: center;
-    }
-    .dog-table img {
-      width: 100px;
-      height: auto;
-      border-radius: 8px;
     }
   </style>
 </head>
@@ -56,36 +40,16 @@
   <div id="app">
     <h1>Dog of the Day</h1>
     <div class="dog-container">
-      <img src="dogImage" alt="Random dog" width="250" height="250" tabindex="0" />
+      <img
+        src="dogImage"
+        alt="Random dog"
+        width="250"
+        height="250"
+        tabindex="0"
+      />
       <h2 class="tiny-text">{{ dogName }}</h2>
       <button type="button" @click="fetchDog">Get New Dog!</button>
       <p class="tiny-text" aria-live="polite">Breed: {{ dogBreed }}</p>
-    </div>
-
-    <!-- All Dogs Table -->
-    <div v-if="dogs.length > 0">
-      <h2 style="text-align:center; margin-top: 60px;">All Dogs in the Database</h2>
-      <table class="dog-table">
-        <thead>
-          <tr>
-            <th>Photo</th>
-            <th>Name</th>
-            <th>Size</th>
-            <th>Owner</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="dog in dogs" :key="dog.dog_id">
-            <td><img src="dog.photoUrl" alt="Dog photo" /></td>
-            <td>{{ dog.name }}</td>
-            <td>{{ dog.size }}</td>
-            <td>{{ dog.owner_name }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div v-else>
-      <p style="text-align:center;">Loading dogs from database...</p>
     </div>
   </div>
 
@@ -97,8 +61,7 @@
         return {
           dogImage: '',
           dogName: 'Sparky',
-          dogBreed: 'Poodle Mix',
-          dogs: []
+          dogBreed: 'Poodle Mix'
         };
       },
       methods: {
@@ -110,29 +73,10 @@
           } catch (err) {
             console.error('Failed to fetch dog image', err);
           }
-        },
-        async loadDogs() {
-          try {
-            const res = await fetch('/api/dogs');
-            if (!res.ok) throw new Error('Failed to fetch dogs');
-            const dogList = await res.json();
-
-            // Fetch a random photo for each dog
-            for (const dog of dogList) {
-              const imgRes = await fetch('https://dog.ceo/api/breeds/image/random');
-              const imgData = await imgRes.json();
-              dog.photoUrl = imgData.message;
-            }
-
-            this.dogs = dogList;
-          } catch (err) {
-            console.error('Failed to load dogs', err);
-          }
         }
       },
       mounted() {
         this.fetchDog();
-        this.loadDogs();
       }
     }).mount('#app');
   </script>
