@@ -92,12 +92,11 @@
         }
 
         function logout() {
-          // Customize this with your actual logout logic
           alert('Logging out...');
         }
 
         onMounted(async () => {
-          user.value = await getCurrentUser();  // Fetch user on mount
+          user.value = await getCurrentUser();
           await loadWalkRequests();
         });
 
